@@ -1,9 +1,62 @@
 body {
-    font-family: system-ui, sans-serif;
-    margin: 2rem;
-    line-height: 1.5;
-  }
-  nav a {
-    margin-right: 1rem;
-  }
-  
+  font-family: system-ui, sans-serif;
+  margin: 2rem;
+  line-height: 1.5;
+  color: #111827;
+  background: #f9fafb;
+}
+
+main {
+  max-width: 720px;
+}
+
+h1 {
+  margin-bottom: 0.25rem;
+}
+
+nav {
+  margin-bottom: 1rem;
+}
+
+nav a {
+  margin-right: 1rem;
+  color: #1f2937;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #ffffff;
+}
+
+.card label {
+  display: block;
+  margin-top: 0.75rem;
+}
+
+.card label:first-child {
+  margin-top: 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin-top: 0.35rem;
+}

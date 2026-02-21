@@ -5,41 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>IQ-tröskel för högskolebörjan</title>
     <link rel="stylesheet" href="/style.css" />
-    <style>
-      main {
-        max-width: 720px;
-      }
-
-      .card {
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 1rem 0;
-      }
-
-      .row {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        margin: 0.5rem 0;
-      }
-
-      .mono {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      }
-
-      input[type="range"] {
-        width: 100%;
-      }
-    </style>
   </head>
   <body>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/api-data">API Data</a>
-      <a href="/healthz">Health</a>
-    </nav>
+   
 
     <main>
       <h1>IQ-tröskel för högskolebörjan</h1>
@@ -48,9 +16,9 @@
       <section class="card">
         <label for="g">
           <strong>g</strong> = andel av årskullen med gymnasieexamen:
-          <span id="gValue" class="mono">72%</span>
+          <span id="gValue" class="mono">88%</span>
         </label>
-        <input id="g" type="range" min="30" max="95" value="72" />
+        <input id="g" type="range" min="30" max="95" value="88" />
 
         <label for="hRate">
           Andel av gymnasieexaminerade som börjar högskola:
