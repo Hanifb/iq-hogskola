@@ -9,7 +9,12 @@ const app = express()
 
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
-app.get('/', (_req, res) => {
+app.get('/', (req, res) => {
+  if (req.query.v === 'beta1') {
+    res.sendFile(path.join(__dirname, '..', 'public', 'twitter-player.html'))
+    return
+  }
+
   res.sendFile(path.join(__dirname, '..', 'components', 'hogskola.htm'))
 })
 
