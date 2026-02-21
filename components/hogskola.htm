@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IQ-tröskel för högskolebörjan</title>
+    <link rel="stylesheet" href="/style.css" />
+    <style>
+      main {
+        max-width: 720px;
+      }
+
+      .card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 0.5rem 0;
+      }
+
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/api-data">API Data</a>
+      <a href="/healthz">Health</a>
+    </nav>
+
+    <main>
+      <h1>IQ-tröskel för högskolebörjan</h1>
+      <p>Modell: IQ ~ N(100, 15), perfekt sortering efter IQ.</p>
+
+      <section class="card">
+        <label for="g">
+          <strong>g</strong> = andel av årskullen med gymnasieexamen:
+          <span id="gValue" class="mono">72%</span>
+        </label>
+        <input id="g" type="range" min="30" max="95" value="72" />
+
+        <label for="hRate">
+          Andel av gymnasieexaminerade som börjar högskola:
+          <span id="hRateValue" class="mono">80%</span>
+        </label>
+        <input id="hRate" type="range" min="30" max="100" value="80" />
+      </section>
+
+      <section class="card">
+        <div class="row">
+          <span>f = andel av kohorten som börjar högskola</span>
+          <strong id="fPercent" class="mono">57.6%</strong>
+        </div>
+        <div class="row">
+          <span>IQ<sub>min</sub> (lägsta IQ i gruppen)</span>
+          <strong id="iqMin" class="mono">97.3</strong>
+        </div>
+        <div class="row">
+          <span>Genomsnittlig IQ i gruppen (trunkerat medelvärde)</span>
+          <strong id="meanIQ" class="mono">109.0</strong>
+        </div>
+      </section>
+
+      <section class="card">
+        <p><strong>Formler:</strong></p>
+        <p id="formulaF" class="mono"></p>
+        <p id="formulaIqMin" class="mono"></p>
+        <p id="formulaMean" class="mono"></p>
+      </section>
+    </main>
+
+    <script>
+      function normalCDFInverse(p) {
+        if (p <= 0) return -Infinity;
+        if (p >= 1) return Infinity;
+        if (p < 0.5) return -normalCDFInverse(1 - p);
+        const t = Math.sqrt(-2 * Math.log(1 - p));
+        const c0 = 2.515517;
+        const c1 = 0.802853;
+        const c2 = 0.010328;
+        const d1 = 1.432788;
+        const d2 = 0.189269;
+        const d3 = 0.001308;
+        return t - (c0 + c1 * t + c2 * t * t) / (1 + d1 * t + d2 * t * t + d3 * t * t * t);
+      }
+
+      function update() {
+        const gInput = document.getElementById("g");
+        const hRateInput = document.getElementById("hRate");
+
+        const g = Number(gInput.value);
+        const hRate = Number(hRateInput.value);
+
+        const gFrac = g / 100;
+        const hFrac = hRate / 100;
+        const f = hFrac * gFrac;
+        const z = normalCDFInverse(1 - f);
+        const iqMin = 100 + 15 * z;
+        const meanIQ = 100 + 15 * (Math.exp(-0.5 * Math.pow(z, 2)) / (Math.sqrt(2 * Math.PI) * f));
+
+        document.getElementById("gValue").textContent = g + "%";
+        document.getElementById("hRateValue").textContent = hRate + "%";
+
+        document.getElementById("fPercent").textContent = (f * 100).toFixed(1) + "%";
+        document.getElementById("iqMin").textContent = iqMin.toFixed(1);
+        document.getElementById("meanIQ").textContent = meanIQ.toFixed(1);
+
+        document.getElementById("formulaF").textContent = "f = " + hFrac.toFixed(2) + " · " + gFrac.toFixed(2) + " = " + f.toFixed(3);
+        document.getElementById("formulaIqMin").innerHTML = "IQ<sub>min</sub> = 100 + 15 · Φ⁻¹(1 − f) = 100 + 15 · Φ⁻¹(" + (1 - f).toFixed(3) + ") ≈ " + iqMin.toFixed(1);
+        document.getElementById("formulaMean").innerHTML = "E[IQ | IQ ≥ IQ<sub>min</sub>] ≈ " + meanIQ.toFixed(1);
+      }
+
+      document.getElementById("g").addEventListener("input", update);
+      document.getElementById("hRate").addEventListener("input", update);
+      update();
+    </script>
+  </body>
+</html>
