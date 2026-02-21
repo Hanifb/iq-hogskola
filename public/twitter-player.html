@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IQ-tröskel för högskolebörjan</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #f9fafb;
+        color: #111827;
+      }
+
+      .wrap {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 720px;
+        min-height: 100vh;
+        padding: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .card {
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 0.6rem;
+        background: #ffffff;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin: 0.25rem 0;
+      }
+
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+
+      label {
+        display: block;
+        margin-top: 0.4rem;
+        font-size: 0.85rem;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+
+      a {
+        color: #1d4ed8;
+        text-decoration: none;
+        font-size: 0.85rem;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>IQ-tröskel för högskolebörjan</h1>
+      <section class="card">
+        <label for="g">
+          <strong>g</strong> gymnasieexamen:
+          <span id="gValue" class="mono">88%</span>
+        </label>
+        <input id="g" type="range" min="30" max="95" value="88" />
+
+        <label for="hRate">
+          Börjar högskola:
+          <span id="hRateValue" class="mono">80%</span>
+        </label>
+        <input id="hRate" type="range" min="30" max="100" value="80" />
+      </section>
+
+      <section class="card">
+        <div class="row"><span>f</span><strong id="fPercent" class="mono">70.4%</strong></div>
+        <div class="row"><span>IQ<sub>min</sub></span><strong id="iqMin" class="mono">91.8</strong></div>
+        <div class="row"><span>Mean IQ</span><strong id="meanIQ" class="mono">103.7</strong></div>
+      </section>
+
+      <p><a href="/" target="_top" rel="noopener noreferrer">Öppna full sida</a></p>
+    </main>
+
+    <script>
+      function normalCDFInverse(p) {
+        if (p <= 0) return -Infinity;
+        if (p >= 1) return Infinity;
+        if (p < 0.5) return -normalCDFInverse(1 - p);
+        const t = Math.sqrt(-2 * Math.log(1 - p));
+        const c0 = 2.515517;
+        const c1 = 0.802853;
+        const c2 = 0.010328;
+        const d1 = 1.432788;
+        const d2 = 0.189269;
+        const d3 = 0.001308;
+        return t - (c0 + c1 * t + c2 * t * t) / (1 + d1 * t + d2 * t * t + d3 * t * t * t);
+      }
+
+      function update() {
+        const g = Number(document.getElementById("g").value);
+        const hRate = Number(document.getElementById("hRate").value);
+
+        const gFrac = g / 100;
+        const hFrac = hRate / 100;
+        const f = hFrac * gFrac;
+        const z = normalCDFInverse(1 - f);
+        const iqMin = 100 + 15 * z;
+        const meanIQ = 100 + 15 * (Math.exp(-0.5 * Math.pow(z, 2)) / (Math.sqrt(2 * Math.PI) * f));
+
+        document.getElementById("gValue").textContent = g + "%";
+        document.getElementById("hRateValue").textContent = hRate + "%";
+        document.getElementById("fPercent").textContent = (f * 100).toFixed(1) + "%";
+        document.getElementById("iqMin").textContent = iqMin.toFixed(1);
+        document.getElementById("meanIQ").textContent = meanIQ.toFixed(1);
+      }
+
+      document.getElementById("g").addEventListener("input", update);
+      document.getElementById("hRate").addEventListener("input", update);
+      update();
+    </script>
+  </body>
+</html>

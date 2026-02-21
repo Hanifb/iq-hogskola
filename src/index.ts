@@ -12,4 +12,10 @@ app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'components', 'hogskola.htm'))
 })
 
+
+
+app.get('/embedtest', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'components', 'hogskola.htm'))
+})
+
 export default app

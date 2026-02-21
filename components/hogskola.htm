@@ -3,12 +3,34 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Beräkna IQ-tröskel för högskolebörjan baserat på andel med gymnasieexamen och övergång till högskola."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="IQ-tröskel för högskolebörjan" />
+    <meta
+      property="og:description"
+      content="Interaktiv modell för IQ-tröskel och genomsnittlig IQ i gruppen som börjar högskola."
+    />
+    <meta property="og:image" content="https://iq-hogskola.vercel.app/logo.png" />
+    <meta property="og:url" content="https://iq-hogskola.vercel.app/" />
+    <meta name="twitter:card" content="player" />
+    <meta name="twitter:title" content="IQ-tröskel för högskolebörjan" />
+    <meta name="twitter:site" content="@hanifbali" />
+    <meta name="twitter:creator" content="@hanifbali" />
+    <meta
+      name="twitter:description"
+      content="Interaktiv modell för IQ-tröskel och genomsnittlig IQ i gruppen som börjar högskola."
+    />
+    <meta name="twitter:image" content="https://iq-hogskola.vercel.app/logo.png" />
+    <meta name="twitter:player" content="https://iq-hogskola.vercel.app/twitter-player.html" />
+    <meta name="twitter:player:width" content="720" />
+    <meta name="twitter:player:height" content="405" />
     <title>IQ-tröskel för högskolebörjan</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-   
-
     <main>
       <h1>IQ-tröskel för högskolebörjan</h1>
       <p>Modell: IQ ~ N(100, 15), perfekt sortering efter IQ.</p>
@@ -86,9 +108,15 @@
         document.getElementById("iqMin").textContent = iqMin.toFixed(1);
         document.getElementById("meanIQ").textContent = meanIQ.toFixed(1);
 
-        document.getElementById("formulaF").textContent = "f = " + hFrac.toFixed(2) + " · " + gFrac.toFixed(2) + " = " + f.toFixed(3);
-        document.getElementById("formulaIqMin").innerHTML = "IQ<sub>min</sub> = 100 + 15 · Φ⁻¹(1 − f) = 100 + 15 · Φ⁻¹(" + (1 - f).toFixed(3) + ") ≈ " + iqMin.toFixed(1);
-        document.getElementById("formulaMean").innerHTML = "E[IQ | IQ ≥ IQ<sub>min</sub>] ≈ " + meanIQ.toFixed(1);
+        document.getElementById("formulaF").textContent =
+          "f = " + hFrac.toFixed(2) + " · " + gFrac.toFixed(2) + " = " + f.toFixed(3);
+        document.getElementById("formulaIqMin").innerHTML =
+          "IQ<sub>min</sub> = 100 + 15 · Φ⁻¹(1 − f) = 100 + 15 · Φ⁻¹(" +
+          (1 - f).toFixed(3) +
+          ") ≈ " +
+          iqMin.toFixed(1);
+        document.getElementById("formulaMean").innerHTML =
+          "E[IQ | IQ ≥ IQ<sub>min</sub>] ≈ " + meanIQ.toFixed(1);
       }
 
       document.getElementById("g").addEventListener("input", update);
